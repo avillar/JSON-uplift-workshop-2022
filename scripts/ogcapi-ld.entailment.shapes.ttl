@@ -1,0 +1,93 @@
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.opengis.net/spec/geosparql/1.0/> .
+@prefix w3cGeo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix ex: <https://example.org/birds/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:featureRules
+  a sh:NodeShape ;
+  sh:rule _:entailConcept ;
+  sh:targetClass geo:Feature ;
+.
+
+_:birdObservationRules
+  a sh:nodeShape ;
+  sh:rule _:entailLabel ;
+  sh:targetClass ex:BirdObservation ;
+.
+
+_:personRules
+  a sh:nodeShape ;
+  sh:rule _:entailPersonLabel ;
+  sh:targetClass foaf:Person ;
+.
+
+_:entailConcept
+  a sh:SPARQLRule ;
+  rdfs:label "Add skos:Concept type for geo:Feature's" ;
+  sh:construct """
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX geo: <http://www.opengis.net/spec/geosparql/1.0/>
+    CONSTRUCT {
+      ?this a skos:Concept
+    } WHERE {
+      ?this a geo:Feature
+    }
+  """ ;
+.
+
+_:entailLabel
+  a sh:SPARQLRule ;
+  rdfs:label "Add additional properties to bird observations" ;
+  sh:construct """
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX ex: <https://example.org/birds/>
+    PREFIX dct: <http://purl.org/dc/terms/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    CONSTRUCT {
+      ?this skos:prefLabel ?label ;
+        rdfs:label ?label ;
+        skos:definition ?desc ;
+        skos:inScheme ex:BirdObservations ;
+        skos:topConceptOf ex:BirdObservations ;
+        dct:provenance "OGC Developer Workshop pipeline" ;
+      .
+      ex:BirdObservations a skos:ConceptScheme ;
+        rdfs:label "Bird observations"@en ;
+        skos:prefLabel "Bird observations"@en ;
+        dct:provenance "OGC Developer Workshop pipeline" ;
+        dct:created "2022-09-30"^^xsd:date ;
+        dct:modified "2022-09-30"^^xsd:date ;
+        skos:definition "Bird observations sample skos concept scheme"@en ;
+        skos:hasTopConcept ?this ;
+      .
+    } WHERE {
+      ?this dct:description ?desc .
+      { SELECT (GROUP_CONCAT(?name; separator=", ") as ?n) WHERE { ?this dct:creator/foaf:name ?name } }
+      BIND(STRLANG(CONCAT("Bird observation by ", ?n), "en") as ?label)
+    }
+  """ ;
+.
+
+_:entailPersonLabel
+  a sh:SPARQLRule ;
+  rdfs:label "Add labels for foaf:Person's" ;
+  sh:construct """
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    CONSTRUCT {
+      ?this rdfs:label ?name
+    } WHERE {
+      ?this foaf:name ?name
+    }
+  """ ;
+.

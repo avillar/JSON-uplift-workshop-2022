@@ -1,0 +1,73 @@
+# baseURI: https://www.opengis.net/def/profile/skos/basics
+# imports: http://datashapes.org/dash
+# imports: http://www.w3.org/2004/02/skos/core
+
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix  skostopconcepts: <https://www.opengis.net/def/profile/skos/basics#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://www.opengis.net/def/profile/skos/basics>
+  a owl:Ontology ;
+  owl:imports <http://datashapes.org/dash> ;
+  owl:imports <http://www.w3.org/2004/02/skos/core> ;
+  dcterms:creator "Rob Atkinson" ;
+  owl:versionInfo "Created for automated entailment per Concept Scheme" ;
+.
+ skostopconcepts:NodeShape_concept
+  a sh:NodeShape ;
+  sh:rule skostopconcepts:SPARQLRule_broadinverse ;
+  sh:rule skostopconcepts:SPARQLRule_narrowinverse ;
+        # skostopconcepts:rdfslabel> ;
+  sh:targetClass skos:Concept ;
+.
+
+skostopconcepts:NodeShape_conceptscheme
+  a sh:NodeShape ;
+  # sh:rule skostopconcepts:topcollection> ;
+        # skostopconcepts:rdfslabel> ;
+  sh:targetClass skos:ConceptScheme ;
+.
+
+skostopconcepts:NodeShape_collection
+  a sh:NodeShape ;
+  # sh:rule skostopconcepts:collection> ;
+        # skostopconcepts:rdfslabel> ;
+  sh:targetClass skos:Collection ;
+.
+
+
+skostopconcepts:SPARQLRule_broadinverse
+  a sh:SPARQLRule ;
+  rdfs:label "Add skos:broader inverse reference" ;
+  sh:construct """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+?c skos:broader ?this
+}
+WHERE {
+    ?this skos:narrower ?c
+    FILTER NOT EXISTS { ?c skos:broader ?this }
+}""" ;
+  sh:prefixes <http://www.w3.org/2004/02/skos/core> ;
+.
+
+skostopconcepts:SPARQLRule_narrowinverse
+  a sh:SPARQLRule ;
+  rdfs:label "Add narrower inverse reference" ;
+  sh:construct """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+?c  skos:narrower ?this
+}
+WHERE {
+    ?this skos:broader ?c
+    FILTER NOT EXISTS { ?c  skos:narrower  ?this }
+}""" ;
+  sh:prefixes <http://www.w3.org/2004/02/skos/core> ;
+.
+
+
