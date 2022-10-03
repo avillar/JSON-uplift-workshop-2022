@@ -16,7 +16,8 @@ RDF documents.
 The `scripts/ingest_json.py` script is responsible for transforming JSON
 files into RDF (JSON-LD and Turtle) documents. It can be run in batch mode
 (generating output files automatically) or in single-document mode (which 
-writes output to specific files or the standard output).
+writes output to specific files or the standard output). In batch mode,
+input is provided as a **comma-separated list of file names**.
 
 `ingest_json.py` works with "context definition files", which are YAML documents
 defining a set of transformations to be done on the input data and
@@ -28,8 +29,11 @@ for more information on creating context definitions.
 Examples:
 
   - `ogcapi-ld/birds1.json` is a JSON file obtained from an OGC API-compatible service.
-  - `ogcapi-ld/_json-context.yml` is the YAML context definition that will
-    be used for that file.
+  - `ogcapi-ld/_json-context.yml` is the default YAML definition context for files in
+    the `ogcapi-ld` directory.
+  - `ogcapi-ld/birds1-geojson.json` is a JSON file to be processed using the [GeoJSON
+    JSON-LD context](https://geojson.org/geojson-ld/geojson-context.jsonld).
+    - `ogcapi-ld/birds1-geojson.yml` is a specific YAML definition context for this file.
 
 ### SHACL entailment and validation
 
