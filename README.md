@@ -95,13 +95,12 @@ docker run -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/upd
 
 ```shell
 # JSON-LD uplifting
-docker run -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
+docker run -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
  ogcapi-ld/birds1.json,ogcapi-ld/birds2-invalid.json,ogcapi-ld/birds3-invalid.json
 # SHACL entailment and validation
-docker run -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
+docker run -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
  ogcapi-ld/birds1.ttl,ogcapi-ld/birds2-invalid.ttl,ogcapi-ld/birds3-invalid.ttl
 ```
-
 
 ## More information
 
