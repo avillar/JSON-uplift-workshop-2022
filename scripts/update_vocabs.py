@@ -37,124 +37,16 @@ SPEC_RULES = [ 'scripts/spec_as_conceptscheme.shapes.ttl'  ] + SKOS_RULES
 PROFILE_RULES = [ 'scripts/prof_as_skos.shapes.ttl'  ] + SKOS_RULES
 DOC_RULES =  [ 'scripts/docs_entailments.shapes.ttl'  ] + SKOS_RULES
 
-# , 'scripts/modspec_entailmenthelpers.ttl'
-#SPEC_VALIDATORS = [ 'definitions/models/modspec_shacl.ttl']
-SPEC_VALIDATORS = [ 'definitions/models/modspec-owl2sh-semi-closed.ttl']
-#DOCREG_CLOSURE = [ "definitions/conceptschemes/docs.ttl" ]
-SPECMODEL_CLOSURE = [ 'definitions/models/modspec_validations.ttl', 'definitions/conceptschemes/status.ttl' ]
-PROFMODEL_CLOSURE = [ 'definitions/conceptschemes/profiles.ttl' , 'definitions/models/prof.ttl'  ]
-APPSCHEMA_CLOSURE = [ 'definitions/models/featuretypes.ttl' ]
-# 'definitions/models/modspec.ttl',
-
 # SPECMODEL_CLOSURE = [ 'scripts/modspecs_entailmenthelpers.ttl']
 
 SKOS_VALIDATOR = get_closure_graph ( COMMON_VALIDATORS  )
-SPEC_VALIDATOR =  get_closure_graph ( SPEC_VALIDATORS  ) + SKOS_VALIDATOR
 #DOCREGISTER_GRAPH = get_closure_graph( DOCREG_CLOSURE )
-TEST_VALIDATOR = get_closure_graph([ 'scripts/test/test_validator.ttl'])
 
 OGCAPI_LD_RULES = ['scripts/ogcapi-ld.entailment.shapes.ttl']
 OGCAPI_LD_VALIDATION_RULES = ['scripts/ogcapi-ld.validation.shapes.ttl']
 OGCAPI_LD_VALIDATOR = SKOS_VALIDATOR + get_closure_graph(OGCAPI_LD_VALIDATION_RULES)
 
 DOMAIN_CFG = {}
-
-DOMAIN_CFG['definitions/conceptschemes'] =  { 'description': "Set of terms registered with OGC NA not covered by specialised domains" ,
-    'glob': '/*.ttl', 'rulelist': SKOS_RULES, 'validator': SKOS_VALIDATOR,
-    'extraont': None,
-    'uri_root_filter': '/def/'}
-
-DOMAIN_CFG[ 'specification-elements/defs'] =  {
-  'description': 'Specification Elements defined according the OGC modular specification and relevant policies' ,
-  'glob': '/*.ttl',
-  'rulelist': SPEC_RULES,
-  'validator': SPEC_VALIDATOR,
-  'extraont': ['definitions/models/modspec_validations.ttl',
-   'definitions/conceptschemes/status.ttl','definitions/models/doc_relations_model.ttl'],
-    'annotations': ['definitions/models/modspec.ttl' , 'definitions/models/policy.ttl' , 'definitions/models/doc_relations_model.ttl'],
-  'uri_root_filter': '/spec/'}
-
-DOMAIN_CFG[ 'definitions/docs'] =  {
-  'description': 'Document Register' ,
-  'glob': '/*.ttl',
-  'rulelist': DOC_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': ['definitions/conceptschemes/doc-type.ttl'],
-  'annotations': ['definitions/docs/annotations/docs_upper_collections.ttl'],
-  'uri_root_filter': '/def/'}
-
-DOMAIN_CFG[ 'incubation/binary-array-ld'] =  {
-  'glob': '/*.ttl',
-  'rulelist': OWL_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': None,
-  'uri_root_filter': '/def/'}
-
-DOMAIN_CFG[ 'scripts/tests'] = {
-  'glob': '/*.ttl',
-  'rulelist': [],
-  'validator': TEST_VALIDATOR,
-  'extraont': ['scripts/test/test_closure.ttl'],
-  'uri_root_filter': '/test/'}
-
-DOMAIN_CFG[ 'definitions/schema/hy_features/hyf'] =  {
-  'glob': '/hyf.ttl',
-  'rulelist': OWL_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': APPSCHEMA_CLOSURE + [ 'definitions/schema/hy_features/hyf/hyf_anno.ttl'],
-  'annotations':  APPSCHEMA_CLOSURE + [ 'definitions/schema/hy_features/hyf/hyf_anno.ttl'],
-  'uri_root_filter': '/def/'}
-
-DOMAIN_CFG[ '/repos/ogc/cybele-common-semantic-model/profiles/model'] =  [ {
-  'glob': '/*_flat.ttl',
-  'rulelist': OWL_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': None,
-  'uri_root_filter': '/w3id.org/'},
-{
-  'glob': '/*_prof.ttl',
-  'rulelist': PROFILE_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': PROFMODEL_CLOSURE,
-  'uri_root_filter': '/w3id.org/'}
-    ]
-DOMAIN_CFG[ '/repos/rob-metalinkage/DEMETER/profiles'] = [ {
-  'glob': '/*/*_flat.ttl',
-  'rulelist': OWL_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': None,
-  'uri_root_filter': '/w3id.org/'},
-{
-  'glob': '/*/*_prof.ttl',
-  'rulelist': PROFILE_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': PROFMODEL_CLOSURE,
-  'uri_root_filter': '/w3id.org/'}
-    ]
-
-
-DOMAIN_CFG['definitions/profiles'] = [ {
-  'glob': '/*.ttl',
-  'rulelist':  PROFILE_RULES,
-  'validator':SKOS_VALIDATOR,
-  'extraont': PROFMODEL_CLOSURE,
-    'annotations': ['definitions/conceptschemes/profiles.ttl', 'definitions/models/prof.ttl'],
-  'uri_root_filter': '/def/'},
-{
-  'glob': '/resources/*_owl.ttl',
-  'rulelist':  OWL_RULES,
-  'validator':SKOS_VALIDATOR,
-  'extraont': None,
-  'uri_root_filter': None}
-]
-
-DOMAIN_CFG['entities'] = {
-  'glob': '/*.ttl',
-  'rulelist': SKOS_RULES,
-  'validator': SKOS_VALIDATOR,
-  'extraont': None,
-  'uri_root_filter': '/def/'
-  }
 
 DOMAIN_CFG['ogcapi-ld'] = {
   'glob': "/*.ttl",
