@@ -52,7 +52,7 @@ DOMAIN_CFG['ogcapi-ld'] = {
   'glob': "/*.ttl",
   'rulelist': OGCAPI_LD_RULES,
   'validator': OGCAPI_LD_VALIDATOR,
-  'extraont': None,
+  'extraont': ['ogcapi-ld/bird-observations.ttl'],
   'uri_root_filter': None,
 }
 
