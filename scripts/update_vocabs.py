@@ -156,7 +156,7 @@ DOMAIN_CFG['entities'] = {
   'uri_root_filter': '/def/'
   }
 
-DOMAIN_CFG['incubation/ogcapi-ld'] = {
+DOMAIN_CFG['ogcapi-ld'] = {
   'glob': "/*.ttl",
   'rulelist': OGCAPI_LD_RULES,
   'validator': OGCAPI_LD_VALIDATOR,
