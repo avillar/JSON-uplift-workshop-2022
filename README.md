@@ -80,14 +80,22 @@ python scripts/update_vocabs.py -a \
 isolated environments called containers. Docker needs to be [installed](https://docs.docker.com/engine/install/) before
 proceeding with the following steps.
 
+#### Optional: build the image
+
+If an image cannot be found for your OS / architecture, you may need to build it first:
+
+```shell
+docker build -t avillarogc/jsonuplift:latest
+```
+
 #### Windows command line (cmd)
 
 ```cmd
 # JSON-LD uplifting
-docker run -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
+docker run --rm -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
  ogcapi-ld/birds1.json,ogcapi-ld/birds2-invalid.json,ogcapi-ld/birds3-invalid.json
 # SHACL entailment and validation
-docker run -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
+docker run --rm -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
  ogcapi-ld/birds1.ttl,ogcapi-ld/birds2-invalid.ttl,ogcapi-ld/birds3-invalid.ttl
 ```
 
@@ -95,10 +103,10 @@ docker run -it -v "%cd%":/repo -w /repo avillarogc/jsonuplift python scripts/upd
 
 ```shell
 # JSON-LD uplifting
-docker run -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
+docker run --rm -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/ingest_json.py --batch -t -j \
  ogcapi-ld/birds1.json,ogcapi-ld/birds2-invalid.json,ogcapi-ld/birds3-invalid.json
 # SHACL entailment and validation
-docker run -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
+docker run --rm -u "$(id -u)" -it -v $(pwd):/repo -w /repo avillarogc/jsonuplift python scripts/update_vocabs.py -a \
  ogcapi-ld/birds1.ttl,ogcapi-ld/birds2-invalid.ttl,ogcapi-ld/birds3-invalid.ttl
 ```
 
