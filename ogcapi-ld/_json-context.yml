@@ -1,16 +1,16 @@
 transform:
+  # Force id's into strings
+  - '.id = "\(.id)"'
   # Convert geometry array to lat + long
   - '.geometry.coordinates = {"lat": .geometry.coordinates[0], "long": .geometry.coordinates[1]}'
   # Extract author from properties
-  - '.by = {"@id": .properties.person, "name": .properties.name}'
+  - '.by = ({"@id": .properties.person, "name": .properties.name} | with_entries(select(.value != null)))'
   # Extract description from properties
   - '.desc = .properties.desc'
   # Create WKT
   - '.geometry.wkt = "POINT(\(.geometry.coordinates.lat),\(.geometry.coordinates.long))"'
 
 types:
-  # Outer type
-  '$': 'ex:BirdObservation'
   # Author type
   '$.by': 'foaf:Person'
 
